@@ -6,18 +6,23 @@ def coco_masks(coco_data, masks_dir):
     if not os.path.exists(masks_dir):
         os.makedirs(masks_dir)
 
+    colors = {
+        1: (255, 0, 0),
+        2: (0, 255, 0)
+    }
+
     for image_info in coco_data['images']:
-        mask = np.zeros((image_info['height'], image_info['width']), dtype=np.uint8)
-        #mask = np.zeros((3888, 5184), dtype=np.uint8)
+        mask = np.zeros((image_info['height'], image_info['width'], 3), dtype=np.uint8)
 
         annotations = [ann for ann in coco_data['annotations'] if ann['image_id'] == image_info['id']]
 
         for ann in annotations:
             x, y, w, h = map(int, ann['bbox'])
             class_id = ann['category_id']
-            cv2.rectangle(mask, (x, y), (x + w, y + h), 255, -1)
+            color = colors.get(class_id, (0, 0, 0))
+            cv2.rectangle(mask, (x, y), (x + w, y + h), color, -1)
 
-        mask_filename = os.path.join(masks_dir, f"{image_info['file_name']}_mask.png")
+        mask_filename = os.path.join(masks_dir, f"{os.path.splitext(image_info['file_name'])[0]}_mask.tif")
         cv2.imwrite(mask_filename, mask)
 
         print(f"mask saved for {image_info['file_name']}")
