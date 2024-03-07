@@ -43,7 +43,7 @@ def process_coco_files(coco_dir, masks_dir):
         coco_masks(coco_data, masks_dir)
 
 
-coco_dir = "G:/script_testing/coco_test/annotations"
-masks_dir = "G:/script_testing/coco_test/masks"
+coco_dir = "path to coco json files"
+masks_dir = "path to save masks"
 
 process_coco_files(coco_dir, masks_dir)
